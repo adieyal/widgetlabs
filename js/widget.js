@@ -7,7 +7,7 @@ widget.datastore = widget.datastore || {};
 widget.active = widget.active || [];
 
 (function() {
-    function requires(obj, url, callback) {
+    function requires_html(obj, url, callback) {
 	if (typeof(window[obj]) == 'undefined') {
 	    var head = document.getElementsByTagName('head')[0];
 	    var script = document.createElement('script');
@@ -25,6 +25,40 @@ widget.active = widget.active || [];
 		}
 	    }
 	    head.appendChild(script);
+	}
+    }
+    
+    function requires_svg(obj, url, callback) {
+	if (typeof(window[obj]) == 'undefined') {
+	    var svg = document.documentElement;
+	    var script = document.createElement('script');
+	    script.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', url);
+	    script.setAttribute('type', 'text/javascript');
+	    /* Most browsers. */
+	    script.onload = callback;
+	    /* IE 6 & 7 */
+	    if (script.readyState) {
+		script.onreadystatechange = function() {
+		    if (this.readyState == 'loaded' || this.readyState == 'complete') {
+			script.onreadystatechange = null;
+			callback();
+		    }
+		}
+	    }
+	    svg.appendChild(script);
+	}
+    }
+    
+    var requires;
+    if (document.documentElement.nodeName === "HTML") {
+	console.log('HTML Document type.');
+	requires = requires_html;
+    } else if (document.documentElement.nodeName === "svg") {
+	console.log('SVG Document type.');
+	requires = requires_svg;
+    } else {
+	requires = function(obj, url, callback) {
+	    throw Error('Unable to determine document type.');
 	}
     }
     
