@@ -86,13 +86,13 @@ widget.active = widget.active || [];
 	    }    
 	}
 	
-	if (!widget.datastore['url']) {
+	if (!widget.datastore[url]) {
 	    d3.json(url, function(data) {
 		widget.datastore[url] = data;
 		loaded(data);
 	    });
 	} else {
-	    var data = widget.datastore['url'];
+	    var data = widget.datastore[url];
 	    loaded(data);
 	}
     }
