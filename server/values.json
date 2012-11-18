@@ -1,0 +1,11 @@
+{
+    "percentage": { "value": "25%" },
+    "number": { "value": 47 },
+    "piechart": {
+	"ctx": { "colors": ["#F00", "#C00", "#900", "#600"]},
+	"data": [{ "label": "one", "value": 40 }, 
+		 { "value": 50 }, 
+		 { "label": "two", "value": 5 }, 
+		 { "label": "30.56%", "value": 30 }]
+    }
+}

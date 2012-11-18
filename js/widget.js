@@ -101,9 +101,12 @@ widget.active = widget.active || [];
 	var node = d3.select(this);
 	var widget_type = node.attr('data-widget');
 	
-	var url = 'js/widget.'+widget_type+'.js';
+	var url = '/js/widget.'+widget_type+'.js';
 	requires(widget.widgets[widget_type], url, function() {
 	    if (widget.widgets[widget_type]) {
+		var w
+		/* Check expected node type. */
+		
 		/* Load widget data and put in the store. */
 		loadData(node, function(data) {
 		    var w = new widget.widgets[widget_type](node, data);
@@ -128,7 +131,7 @@ widget.active = widget.active || [];
 	/* TODO: Load from a better URL. */
 	/* TODO: Check for crap browser and call PNG
 	   loader instead of proper widget code. */
-	requires('d3', 'js/d3.v2.js', function() {
+	requires('d3', '/js/d3.v2.js', function() {
 	    /* Attach widgets. */
 	    var widgets = d3.selectAll('[data-widget]')
 		.each(attach);

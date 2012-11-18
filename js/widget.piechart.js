@@ -28,6 +28,13 @@
 	this.ctx = data.ctx || {};
 	this.data = data.data;
 	
+	this.style = {
+	    'slice0': 'fill:#cf3e96;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10',
+	    'slice1': 'fill:#62a73b;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10',
+	    'slice2': 'fill:#79317f;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10',
+	    'slice3': 'fill:#009983;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:10'
+	}
+	
 	this.initialize();
 	this.update();
     }
@@ -63,8 +70,9 @@
 		.enter()
 		.append('svg:path');
 	    arcs.attr('class', 'pie slice')
-		.attr('fill', function(d, i) { return me.color[i]; } )
-		.attr('d', arc);
+		.attr('fill', function(d, i) { return me.color[i]; })
+		.attr('d', arc)
+	        .attr('style', function(d, i) { return this.style['slice'+i]; });
 	    
 	    var labels = vis.selectAll('text.pie.slice.label')
 		.data(data)
