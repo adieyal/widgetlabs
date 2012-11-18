@@ -18,6 +18,23 @@
             {"series" : "2010", "value" : 15}
         ],
         "width" : 400,
+        "height" : 400,
+        "line" : {
+           "type" : "const",
+           "const_val" : 5
+        },
+        "bar" : {
+            "width" : 55
+        }
+    },
+    "segmentpie" : {
+        "data" : [
+            {"value" : 45},
+            {"value" : 23},
+            {"value" : 18},
+            {"value" : 5}
+        ],
+        "width" : 400,
         "height" : 400
     }
 }

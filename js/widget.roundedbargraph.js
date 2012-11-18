@@ -1,4 +1,17 @@
 /* Bar graph with rounded corners */
+/*
+    Example configuration snippet
+    "data" : [
+        {"series" : "2005", "value" : 10}, 
+        {"series" : "2006", "value" : 11},
+        {"series" : "2007", "value" : 12},
+        {"series" : "2008", "value" : 13},
+        {"series" : "2009", "value" : 14},
+        {"series" : "2010", "value" : 15}
+    ],
+    "width" : 400,
+    "height" : 400
+*/
 
 (function() {
     if (typeof widget == 'undefined') {
@@ -40,7 +53,7 @@
             // bars config
             this.bar = ctx.bar || {};
             this.bar.color = this.bar.color ||  '#f1b821';
-            this.bar.rounding = this.bar.rounding === undefined ? 5 : this.bar.rounding;
+            this.bar.rounding = this.bar.rounding === undefined ? 10 : this.bar.rounding;
             this.bar.width = this.bar.width || 25;
             this.bar.margin = this.bar.margin || 10; // margin between the arcs
 
@@ -77,7 +90,7 @@
                 .attr("class", "chart")
                 .attr("width", this.w)
                 .attr("height", this.h)
-                //.attr("viewBox", "0 0 300 300")
+                //.attr("viewBox", "0 0 " + this.w + " " + this.h)
                 .append('g');
 
             // Add the colored arcs
