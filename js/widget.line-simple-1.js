@@ -49,28 +49,27 @@
             if (me.data.length === undefined || me.data.length === 0) { return; }
 
 	    var bar = {};
-	    console.log(me.data[0].length);
-	    bar.width = me.width/me.data[0].length;
+	    bar.width = me.width/me.data.length;
 	    
 	    var x = d3.scale.linear()
-		.domain([0, me.data[0].length])
+		.domain([0, me.data.length])
 		.range([me.left, me.left+me.width]);
 	    var y = d3.scale.linear()
-		.domain([0, d3.max(me.data[0])])
+		.domain([0, d3.max(me.data)])
 		.range([me.top+me.height, me.top]);
 	    var line = d3.svg.line()
-		.x(function(d, i) { console.log(d, i); return x(i)+bar.width/2 })
+		.x(function(d, i) { return x(i)+bar.width/2 })
 		.y(function(d, i) { return y(d) });
 
             me.node
 		.attr('class', 'linechart');
 	    var lines = me.content.selectAll('path.linegraph.line')
-		.data(me.data)
+		.data([me.data])
 		.enter()
 		.append('svg:path');
 	    lines.attr('class', function(d, i) { return 'linegraph line line'+i; })
 		.attr('style', function(d, i) { return me.style['line']; })
-		.attr('d', function(d, i) { console.log(d); return line(d) });
+		.attr('d', function(d, i) { return line(d) });
 	}
     }
 })();

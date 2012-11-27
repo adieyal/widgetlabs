@@ -9,27 +9,25 @@
     
     widget.widgets[name] = function(node, data) {
 	if (node === undefined){ throw Error('No node given.'); }	
-	if (data.data === undefined){ throw Error('No data given.'); }
-        if (data.data.length === undefined || data.data.length === 0) { throw Error('Data invalid.'); }
-	
 	this.node = node;
-	this.content = node.select('g.widget-content');
-	this.ctx = data.ctx || {};
-	this.data = data.data;
 	
 	this.style = {
-	    //'bar': 'fill:#cf3e96;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414'
 	    'bar': 'fill:#cf3e96;',
 	    'label': 'font-family:Myriad Roman;fill:#cf3e96;'
 	}
 	
 	this.initialize();
-	this.update();
+	
+	if (data) {
+	    this.update(data);
+	}
     }
     
     widget.widgets[name].prototype = {
 	initialize: function() {
-	    var ctx = this.ctx;
+	    this.content = this.node.selectAll('g.widget-content').data([0]);
+	    this.content.enter().append('svg:g').attr('class', 'widget-content');
+	    this.content.exit().remove();
 	    
 	    var bbox = this.node.select('rect.widget-boundingbox')
 	    var bounds = bbox[0][0].getBBox()
@@ -43,8 +41,10 @@
 	    
 	    this.content.text('');
 	},
-	update: function() {
+	update: function(data) {
 	    var me = this;
+	    me.data = data['data'] || data;
+	    me.style = data['style'] || eval('('+me.node.attr('data-style')+')') || me.style;
 	    
             if (me.data.length === undefined || me.data.length === 0) { return; }
 

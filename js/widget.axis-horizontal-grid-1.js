@@ -8,15 +8,9 @@
     }
     
     widget.widgets[name] = function(node, data) {
-	if (node === undefined){ throw Error('No node given.'); }	
-	if (data.data === undefined){ throw Error('No data given.'); }
-        if (data.data.length === undefined || data.data.length === 0) { throw Error('Data invalid.'); }
+	if (node === undefined){ throw Error('No node given.'); }
 	
 	this.node = node;
-	this.content = node.select('g.widget-content');
-	this.ctx = data.ctx || {};
-	this.data = data.data;
-	this.labels = data.labels;
 	
 	this.style = {
 	    'axis': 'stroke:#000000;stroke-width:0.25;stroke-linecap:round;stroke-dasharray:0, 0.5',
@@ -25,12 +19,17 @@
 	}
 	
 	this.initialize();
-	this.update();
+	
+	if (data) {
+	    this.update(data);
+	}
     }
     
     widget.widgets[name].prototype = {
 	initialize: function() {
-	    var ctx = this.ctx;
+	    this.content = this.node.selectAll('g.widget-content').data([0]);
+	    this.content.enter().append('svg:g').attr('class', 'widget-content');
+	    this.content.exit().remove();
 	    
 	    var bbox = this.node.select('rect.widget-boundingbox')
 	    var bounds = bbox[0][0].getBBox()
@@ -43,8 +42,11 @@
 	    
 	    this.content.text('');
 	},
-	update: function() {
+	update: function(data) {
 	    var me = this;
+	    me.data = data['data'] || data;
+	    me.style = data['style'] || me.style;
+	    me.labels = data['labels'] || me.labels || [];
 	    
             if (me.data.length === undefined || me.data.length === 0) { return; }
 
