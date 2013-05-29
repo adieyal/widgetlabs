@@ -13,8 +13,8 @@
 	this.node = node;
 	
 	this.style = {
-	    'axis': 'stroke:#000000;stroke-width:0.25;stroke-linecap:round;stroke-dasharray:0, 0.5',
-	    'grid': 'stroke:#000000;stroke-width:0.25;stroke-linecap:round;stroke-dasharray:0, 0.5',
+	    'axis': 'stroke:#231f20;stroke-width:0.25;stroke-linecap:round;stroke-dasharray:0, 0.5',
+	    'grid': 'stroke:#231f20;stroke-width:0.25;stroke-linecap:round;stroke-dasharray:0, 0.5',
 	    'text': 'fill:#595a5c;font-family:Myriad Roman'
 	}
 	
@@ -45,20 +45,18 @@
 	update: function(data) {
 	    var me = this;
 	    me.data = data['data'] || data;
-	    me.style = data['style'] || me.style;
+	    me.domainx = data['domain-x'] || [0, me.data.length];
+	    me.domainy = data['domain-y'] || [0, d3.max(me.data)];
+	    me.style = data['style'] || eval('('+me.node.attr('data-style')+')') || me.style;
 	    me.labels = data['labels'] || me.labels || [];
 	    
             if (me.data.length === undefined || me.data.length === 0) { return; }
-
-	    var bar = {};
-	    bar.width = (me.width/me.data.length)*0.9;
-	    bar.r = bar.width/4;
 	    
 	    var x = d3.scale.linear()
-		.domain([0, me.data.length])
+		.domain(me.domainx)
 		.range([me.left, me.left+me.width]);
 	    var y = d3.scale.linear()
-		.domain([0, d3.max(me.data)])
+		.domain(me.domainy)
 		.range([me.top+me.height, me.top]);
             me.node
 		.attr('class', 'axis');
@@ -78,9 +76,11 @@
 	    
 	    var ticks = y.ticks(5);
 	    var hgrid = me.content.selectAll('line.axis.grid.hgrid')
-		.data(ticks)
-		.enter()
+		.data(ticks);
+	    hgrid.enter()
 		.append('svg:line');
+	    hgrid.exit()
+		.remove();
 	    hgrid.attr('x1', me.left)
 		.attr('x2', me.left+me.width)
 		.attr('y1', function(d, i) { return y(d); })
@@ -95,7 +95,6 @@
 		.attr('x', function(d, i) { return x(i)+(me.width/me.data.length)/2; })
 		.attr('style', me.style['text'])
 	        .attr('text-anchor', 'middle')
-	        //.attr('dominant-baseline', 'middle')
 	        .attr('font-size', me.height/12)
 		.text(function (d, i) { return d; });
 
@@ -107,8 +106,7 @@
 		.attr('y', function(d, i) { return y(d); })
 		.attr('style', me.style['text'])
 	        .attr('text-anchor', 'end')
-	        .attr('dominant-baseline', 'middle')
-	        .attr('font-size', me.height/12)
+	        //.attr('font-size', me.height/12)
 		.text(function (d, i) { return d; });
 	}
     }

@@ -79,11 +79,14 @@ widget.active = widget.active || [];
 	}
 	
 	function loaded(data) {
+	    var d = data;
 	    if (sel) {
-		callback(data[sel]);
-	    } else {
-		callback(data);
-	    }    
+		var sels = sel.split('.');
+		for (i=0; i<sels.length; i++) {
+		    d = d[sels[i]];
+		}
+	    }
+	    callback(d);
 	}
 	
 	if (!widget.datastore[url]) {
@@ -104,9 +107,6 @@ widget.active = widget.active || [];
 	var url = '/js/widget.'+widget_type+'.js';
 	requires(widget.widgets[widget_type], url, function() {
 	    if (widget.widgets[widget_type]) {
-		var w
-		/* Check expected node type. */
-		
 		/* Load widget data and put in the store. */
 		loadData(node, function(data) {
 		    var w = new widget.widgets[widget_type](node, data);

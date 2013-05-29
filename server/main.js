@@ -52,7 +52,7 @@ var service = server.listen(8080, function(request, response) {
 		response.write(data);
 		response.close();
 		console.log('Done!');
-	    }, 1000);
+	    }, 40000);
 	};
     }
 });

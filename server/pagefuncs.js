@@ -44,11 +44,14 @@ widget.active = widget.active || [];
 	}
 	
 	function loaded(data) {
+	    var d = data;
 	    if (sel) {
-		callback(data[sel]);
-	    } else {
-		callback(data);
-	    }    
+		var sels = sel.split('.');
+		for (i=0; i<sels.length; i++) {
+		    d = d[sels[i]];
+		}
+	    }
+	    callback(d);
 	}
 	
 	if (!widget.datastore['url']) {

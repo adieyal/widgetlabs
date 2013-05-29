@@ -7,18 +7,27 @@
     
     widget.widgets.text = function(node, data) {
 	this.node = node;
-	this.data = data;
+	
 	this.initialize();
-	this.update();
+	
+	if (data) {
+	    this.update(data);
+	}
     }
     
     widget.widgets.text.prototype = {
 	initialize: function() {
-	    return;
+	    this.style = null;
 	},
-	update: function() {
-	    var node = this.node;
-	    node.text(this.data['value']);
+	update: function(data) {
+	    var me = this;
+	    me.data = data['value'] || data || me.data;
+	    me.style = data['style'] || me.style;
+	    
+	    me.node.text(me.data);
+	    if (me.style) {
+		me.node.attr('style', me.style);
+	    }
 	}	    
     };
 })();

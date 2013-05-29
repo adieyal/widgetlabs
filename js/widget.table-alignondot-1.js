@@ -1,7 +1,7 @@
 /* table-simple-1 */
 
 (function() {
-    var name = 'table-simple-1';
+    var name = 'table-alignondot-1';
     
     if (typeof widget == 'undefined') {
 	return;
@@ -69,31 +69,89 @@
 	    rows.exit()
 		.remove();
 	    
-	    var cells = rows.selectAll('text.table.cell')
+	    var cells = rows.selectAll('g.table.cell')
 		.data(function(d, i) {
 		    return d.map(function(d) {
 			return { 'data': d, 'row': i };
 		    });
 		});
 	    cells.enter()
-		.append('svg:text')
-		.attr('class', 'table cell')
-		.attr('style', me.style['text'])
-		.attr('text-anchor', me.style.anchor);
+		.append('svg:g')
+		.attr('class', 'table cell');
 	    cells.exit()
 		.remove();
-	    cells.text(function(d, i) { return d['data']; })
-		.attr('x', function(d, i) {
-		    if (me.style.anchor == 'middle') {
-			return x(i+0.5);
-		    } else if (me.style.anchor == 'right') {
-			return x(i+1);
-		    } else {
-			return x(i);
-		    }
-		})
-		.attr('y', function(d, i) { return y(d['row']+0.5)+this.getBBox().height/4; });
+	    
+	    cells.each(function(d, i) {
+		var data = String(d.data);
+		var left = '';
+		var right = '';
+		var middle = '.';
+		var col = i;
+		var row = d['row'];
+		var dotwidth = 0;
+		
+		if (data.indexOf('.') == -1) {
+		    middle = data;
+		} else {
+		    var split = data.split('.');
+		    left = split[0];
+		    right = split[1];
+		}
 
+		d3.select(this)
+		    .append('svg:text')
+		    .attr('class', 'table cell middle')
+		    .attr('style', me.style['text'])
+		    .attr('text-anchor', 'middle')
+		    .text(middle)
+		    .attr('x', function(d, i) {
+			if (me.style.anchor == 'middle') {
+			    return x(col+0.5);
+			} else if (me.style.anchor == 'right') {
+			    return x(col+1);
+			} else {
+			    return x(col);
+			}
+		    })
+		    .attr('y', function(d, i) { return y(row+0.5)+this.getBBox().height/4; });
+
+		if (middle == '.') {
+		    dotwidth = d3.select(this).select('text.table.cell.middle')[0][0].getBBox().width;
+		    
+		    d3.select(this)
+			.append('svg:text')
+			.attr('class', 'table cell left')
+			.attr('style', me.style['text'])
+			.attr('text-anchor', 'end')
+			.text(left)
+			.attr('x', function(d, i) {
+			    if (me.style.anchor == 'middle') {
+				return x(col+0.5)-dotwidth/2;
+			    } else if (me.style.anchor == 'right') {
+				return x(col+1)-dotwidth/2;
+			    } else {
+				return x(col)-dotwidth/2;
+			    }
+			})
+			.attr('y', function(d, i) { return y(row+0.5)+this.getBBox().height/4; });
+		    d3.select(this)
+			.append('svg:text')
+			.attr('class', 'table cell right')
+			.attr('style', me.style['text'])
+			.attr('text-anchor', 'start')
+			.text(right)
+			.attr('x', function(d, i) {
+			    if (me.style.anchor == 'middle') {
+				return x(col+0.5)+dotwidth/2;
+			    } else if (me.style.anchor == 'right') {
+				return x(col+1)+dotwidth/2;
+			    } else {
+				return x(col)+dotwidth/2;
+			    }
+			})
+			.attr('y', function(d, i) { return y(row+0.5)+this.getBBox().height/4; });
+		    }
+		});
 	}
     }
 })();

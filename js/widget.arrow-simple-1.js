@@ -48,7 +48,7 @@
 	    
 	    if (me.initialized != true) { throw Error('Attempt to update uninitialized widget.'); }
 
-	    if ((me.data == 'up') || (me.data > 0)) { me.data = true; }
+	    if ((me.data == 'up') || (me.data > 0) || (me.data == 0)) { me.data = true; }
 	    if ((me.data == 'down') || (me.data < 0)) { me.data = false; }
 	    if ((me.data != true) && (me.data != false)) { throw Error('Widget does not know what to do with data.'); }
 

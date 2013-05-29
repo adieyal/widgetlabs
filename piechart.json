@@ -1,0 +1,7 @@
+{
+    "ctx": { "colors": ["#F00", "#C00", "#900", "#600"]},
+    "data": [{ "label":"one", "value":40 }, 
+             { "value":50 }, 
+             { "label":"two", "value":5 }, 
+             { "label":"three", "value":30 }]
+}

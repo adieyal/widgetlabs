@@ -22,29 +22,28 @@
     }
     
     widget.widgets[name] = function(node, data) {
-	if (node === undefined){ throw Error('No node given.'); }	
-	if (data.data === undefined){ throw Error('No data given.'); }
-        if (data.data.length === undefined || data.data.length === 0) { throw Error('Data invalid.'); }
-	
+	if (node === undefined){ throw Error('No node given.'); }
 	this.node = node;
-	this.content = node.select('g.widget-content');
-	this.ctx = data.ctx || {};
-	this.data = data.data;
 	
 	this.style = {
 	    'slice0': 'fill:#cf3e96;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414',
 	    'slice1': 'fill:#62a73b;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414',
 	    'slice2': 'fill:#79317f;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414',
-	    'slice3': 'fill:#009983;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414'
+	    'slice3': 'fill:#2393d9;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:1.414'
 	}
 	
 	this.initialize();
-	this.update();
+	
+	if (data) {
+	    this.update(data);
+	}
     }
     
     widget.widgets[name].prototype = {
 	initialize: function() {
-	    var ctx = this.ctx;
+	    this.content = this.node.selectAll('g.widget-content').data([0]);
+	    this.content.enter().append('svg:g').attr('class', 'widget-content');
+	    this.content.exit().remove();
 	    
 	    var bbox = this.node.select('rect.widget-boundingbox')
 	    var bounds = bbox[0][0].getBBox()
@@ -59,14 +58,17 @@
 	    var tx = this.left+this.width/2;
 	    var ty = this.top+this.height/2;
 	    this.content.attr('transform', 'translate('+tx+','+ty+')');
-
-	    this.color = ctx.colors || d3.scale.category20c();
 	    
-	    this.content.text('');
+	    this.content.text('')
+	    this.initialized = true;;
 	},
-	update: function() {
+	update: function(data) {
 	    var me = this;
-	    
+	    me.data = data['data'] || data || me.data;
+	    me.style = data['style'] || eval('('+me.node.attr('data-style')+')') || me.style;
+	    	
+	    if (me.initialized != true) { throw Error('Attempt to update uninitialized widget.'); }
+	    if (me.data === undefined){ return; }
             if (me.data.length === undefined || me.data.length === 0) { return; }
 	    
             me.node
@@ -76,21 +78,25 @@
 		.outerRadius(me.r);
 	    
             var pie = d3.layout.pie()
-		.value(function(d) {
+		.value(function(d, i) {
 		    if (typeof d === 'number') {
 			return d;
 		    } else {
-			return d.value;
-		    }
-		    });
+			if ((d.value) && (typeof d.value === 'number')) {
+			    return d.value;
+			} else {
+			    return 0;
+			}
+		    }});
 	    
-	    var data = pie(this.data);
 	    var arcs = me.content.selectAll('path.pie.slice')
-		.data(data)
-		.enter()
-		.append('svg:path');
-	    arcs.attr('class', function(d, i) { return 'pie slice slice'+i; })
-		.attr('d', arc)
+		.data(pie(me.data));
+	    arcs.enter()
+		.append('svg:path')
+		.attr('class', function(d, i) { return 'pie slice slice'+i; });
+	    arcs.exit()
+		.remove();
+	    arcs.attr('d', arc)
 	        .attr('style', function(d, i) { return me.style['slice'+i]; });
 	}
     }

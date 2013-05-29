@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="600px" height="900px">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="10%" y="10%" width="300px" height="300px" data-widget="piechart" data-src="values.json#piechart" class="piechart" viewBox="-100 -100 200 200">
+      <!-- This content is entirely optional and will be deleted. The reason for having it here is if the file is
+	   opened in something like inkscape. -->
+      <path class="pie slice" fill="#F00" d="M58.778525229247315,80.90169943749474A100,100 0 0,1 -98.22872507286887,18.738131458572457L0,0Z"></path>
+      <path class="pie slice" fill="#C00" d="M6.123031769111886e-15,-100A100,100 0 0,1 58.778525229247315,80.90169943749474L0,0Z"></path>
+      <path class="pie slice" fill="#900" d="M-24.868988716485443,-96.85831611286312A100,100 0 0,1 7.044874666267686e-14,-100L0,0Z"></path>
+      <path class="pie slice" fill="#600" d="M-98.22872507286887,18.738131458572457A100,100 0 0,1 -24.868988716485443,-96.85831611286312L0,0Z"></path>
+      <text class="pie slice label" transform="translate(-18.4062276342339,46.48882429441257)" text-anchor="middle">one</text>
+      <text class="pie slice label" transform="translate(47.552825814757675,-15.450849718747369)" text-anchor="middle">two</text>
+      <text class="pie slice label" transform="translate(-6.266661678215186,-49.60573506572389)" text-anchor="middle">two</text>
+      <text class="pie slice label" transform="translate(-42.21639627510075,-26.791339748949838)" text-anchor="middle">three</text>
+      <circle r="30"/>
+    </svg>
+</svg>

@@ -1,7 +1,7 @@
-/* table-simple-1 */
+/* table-totals-1 */
 
 (function() {
-    var name = 'table-simple-1';
+    var name = 'table-totals-1';
     
     if (typeof widget == 'undefined') {
 	return;
@@ -12,8 +12,7 @@
 	this.node = node;
 	
 	this.style = {
-	    'anchor': 'middle',
-	    'text': 'fill:#595A5C;font-family:Calibri;font-size:7;'
+	    'text': 'fill:#000000;font-family:Calibri;font-size:7;font-weight:bold;'
 	}
 	
 	this.initialize();
@@ -45,7 +44,6 @@
 	    var me = this;
 	    me.data = data['data'] || data;
 	    me.style = data['style'] || eval('('+me.node.attr('data-style')+')') || me.style;
-	    me.style.anchor = me.style.anchor || 'middle';
 	    
 	    if (me.initialized != true) { throw Error('Attempt to update uninitialized widget.'); }
             if (me.data.length === undefined || me.data.length === 0) { return; }
@@ -58,42 +56,46 @@
 	    var y = d3.scale.linear()
 		.domain([0, me.data.length])
 		.range([me.top, me.top+me.height]);
-
+	    
+	    var totals = []
+	    for (i=0; i<maxcols; i++) {
+		var sum = 0;
+		for (j=0; j<me.data.length; j++) {
+		    var item = me.data[j][i];
+		    if (typeof item === 'number') {
+			sum += me.data[j][i];
+		    } else {
+			var num = parseFloat(item);
+			if (!isNaN(num)) {
+			    sum += num;
+			}
+		    }
+		}
+		totals.push(sum.toFixed(2));
+	    }
+	    
             me.node
 		.attr('class', 'table');
-	    var rows = me.content.selectAll('g.table.row')
-		.data(me.data);
-	    rows.enter()
+	    var row = me.content.selectAll('g.table.totals')
+		.data([totals]);
+	    row.enter()
 		.append('svg:g')
-		.attr('class', function(d, i) { return 'table row row'+i; });
-	    rows.exit()
+		.attr('class', function(d, i) { return 'table totals row row'+i; });
+	    row.exit()
 		.remove();
-	    
-	    var cells = rows.selectAll('text.table.cell')
-		.data(function(d, i) {
-		    return d.map(function(d) {
-			return { 'data': d, 'row': i };
-		    });
-		});
+
+	    var cells = row.selectAll('text.table.totals.cell')
+		.data(totals);
 	    cells.enter()
 		.append('svg:text')
-		.attr('class', 'table cell')
+		.attr('class', 'table totals cell')
 		.attr('style', me.style['text'])
-		.attr('text-anchor', me.style.anchor);
+		.attr('text-anchor', 'middle');
 	    cells.exit()
 		.remove();
-	    cells.text(function(d, i) { return d['data']; })
-		.attr('x', function(d, i) {
-		    if (me.style.anchor == 'middle') {
-			return x(i+0.5);
-		    } else if (me.style.anchor == 'right') {
-			return x(i+1);
-		    } else {
-			return x(i);
-		    }
-		})
-		.attr('y', function(d, i) { return y(d['row']+0.5)+this.getBBox().height/4; });
-
+	    cells.text(function(d, i) { return d; })
+		.attr('x', function(d, i) { return x(i+0.5); })
+		.attr('y', function(d, i) { return me.top+me.height/2+this.getBBox().height/4; });
 	}
     }
 })();
