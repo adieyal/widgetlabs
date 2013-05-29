@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">  
+  
+  <_name>Update widgets</_name>  
+  <id>za.co.widgetlabs.update</id>  
+  
+  <effect>  
+    <object-type>all</object-type>  
+    <effects-menu>  
+      <submenu _name="WidgetLabs"/>  
+    </effects-menu>
+  </effect>  
+  
+  <script>  
+    <command reldir="extensions" interpreter="python">widgetlabs-update.py</command>  
+  </script>  
+  
+</inkscape-extension> 
