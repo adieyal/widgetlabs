@@ -101,19 +101,20 @@ widget.active = widget.active || [];
     }
 
     function attach() {
-	var node = d3.select(this);
-	var widget_type = node.attr('data-widget');
-	
-	var url = '/js/widget.'+widget_type+'.js';
-	requires(widget.widgets[widget_type], url, function() {
-	    if (widget.widgets[widget_type]) {
-		/* Load widget data and put in the store. */
-		loadData(node, function(data) {
-		    var w = new widget.widgets[widget_type](node, data);
-		    widget.active.push(w);
-		});
-	    }
-	});
+        var node = d3.select(this);
+        var widget_type = node.attr('data-widget');
+        
+        var url = '/js/widget.' + widget_type + '.js';
+
+        requires(widget.widgets[widget_type], url, function() {
+            if (widget.widgets[widget_type]) {
+                /* Load widget data and put in the store. */
+                loadData(node, function(data) {
+                    var w = new widget.widgets[widget_type](node, data);
+                    widget.active.push(w);
+                });
+            }
+        });
     }
     
     widget.update = function() {
