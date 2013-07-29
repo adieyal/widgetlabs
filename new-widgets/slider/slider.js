@@ -30,7 +30,7 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 		var data = me.data[i];
 		var m = svg.find('#tpl-marker-'+(data['marker-style'] || 'short')).clone();
 		var b = svg.find('#tpl-inner-bar').clone();
-		var x = 136*(data['position'] || 0);
+		var x = 86*(data['position'] || 0);
 		
 		m.attr('id', 'marker'+i);
 		m.attr('transform', 'translate('+x+',0)');
