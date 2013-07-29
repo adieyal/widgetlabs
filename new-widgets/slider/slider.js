@@ -25,6 +25,7 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	    var markers = [];
 	    
 	    if (!me.data) { me.load(); }
+	    if (!me.data) { return; }
 	    d.children().remove()
 	    for (i=0; i<me.data.length; i++) {
 		var data = me.data[i];
@@ -79,13 +80,14 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	load: function() {
 	    var me = this;
 	    var node = $(me.node);
-	    var src = node.data('src').split('#')[0];
-	    var sel = node.data('src').split('#')[1];
+	    var src = node.data('src');
 
 	    if (src) {
+		var url = src.split('#')[0];
+		var sel = src.split('#')[1];
 		$.ajax({
 		    type: 'get',
-		    url: src,
+		    url: url,
 		    dataType: 'json',
 		    async: false,
 		    success: function(d) {
