@@ -1,4 +1,4 @@
-define(['jquery', 'text!../gauge/base.svg'], function($, svg) {
+define(['jquery', 'text!widgets/gauge/base.svg'], function($, svg) {
     Widget = function(element) {
 	this.node = element;
     }

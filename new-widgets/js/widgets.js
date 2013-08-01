@@ -15,7 +15,7 @@ require(['jquery'], function($) {
 	this.each(function() {
 	    var element = $(this);
 	    var widget = element.data('widget');
-	    require([widget], function(Widget) {
+	    require(['widgets/js/'+widget], function(Widget) {
 		var w = new Widget(element[0]);
 		if (!w.can_render()) {
 		    element.pngWidget();

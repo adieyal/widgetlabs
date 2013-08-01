@@ -1,4 +1,4 @@
-define(['jquery', 'text!../slider/base.svg'], function($, svg) {
+define(['jquery', 'text!widgets/slider/base.svg'], function($, svg) {
     Widget = function(element) {
 	this.node = element;
     }
