@@ -58,6 +58,7 @@ define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, unused, svg)
         var as_percentage = me.data.as_percentage
 	    var arcs = content.selectAll('g.pie.slice').data(pie(me.data.values));
 	    arcs.enter().append('svg:g').attr('class', function(d, i) {
+            if (is_grey) return 'pie slice slice-grey';
             return 'pie slice slice'+i;
 	    });
 
