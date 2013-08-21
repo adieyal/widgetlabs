@@ -34,23 +34,33 @@ define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, unused, svg)
 	    content.exit().remove();
 	    
 	    /* Draw the donut segments. */
-            var arc = d3.svg.arc().outerRadius(35).innerRadius(18);
+        var arc = d3.svg.arc().outerRadius(35).innerRadius(18);
 	    
-            var pie = d3.layout.pie().value(function(d, i) {
+        var pie = d3.layout.pie().value(function(d, i) {
 		if (typeof d === 'number') {
 		    return d;
 		} else {
-		    if ((d.value) && (typeof d.value === 'number')) {
-			return d.value;
+		    if (d && (typeof d === 'number')) {
+                return d;
 		    } else {
-			return 0;
+                return 0;
 		    }
 		}});
 	    
-	    var arcs = content.selectAll('g.pie.slice').data(pie(me.data));
+        var total = me.data.values.reduce(function(a, b) { return a + b });
+
+        var is_grey = false;
+        if (total == 0) {
+            me.data.values = [0, 0, 0, 1];
+            is_grey = true;
+        }
+
+        var as_percentage = me.data.as_percentage
+	    var arcs = content.selectAll('g.pie.slice').data(pie(me.data.values));
 	    arcs.enter().append('svg:g').attr('class', function(d, i) {
-		return 'pie slice slice'+i;
+            return 'pie slice slice'+i;
 	    });
+
 	    arcs.exit().remove();
 	    var paths = arcs.append('svg:path');
 	    paths.attr('d', arc);
@@ -63,7 +73,14 @@ define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, unused, svg)
 		.attr("dy", 3) 
 		.attr("text-anchor", "middle") 
 		.attr("display", function(d) { return d.value >= 0.02 ? null : "none"; }) 
-		.text(function(d, i) { return (d.value*100).toFixed(0) + "%"});
+		.text(function(d, i) {
+            if (is_grey) return "";
+
+            if (as_percentage)
+                return (d.value * 100).toFixed(0) + "%"
+            else
+                return (d.value)
+        });
 	    return;
 	},
 	load: function() {
